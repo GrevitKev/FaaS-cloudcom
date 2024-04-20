@@ -1,6 +1,6 @@
 const { app } = require('@azure/functions');
 
-app.http('dreiecken1', {
+app.http('httpTrigger7', {
     methods: ['GET', 'POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
@@ -13,7 +13,7 @@ app.http('dreiecken1', {
         const D = [parseFloat(request.query.get('Dx')), parseFloat(request.query.get('Dy'))];
         const point = [parseFloat(request.query.get('Px')), parseFloat(request.query.get('Py'))];
 
-        let helpAnswer = "Pleas only send numbers not anythin else\nexample Link:\nhttp://exampledomain.net/api/dreiecken1?Ax=0&Ay=0&Bx=5&By=0&Cx=0&Cy=5&Px=1&Dx=0&Dy=0&Py=1\n"
+        let helpAnswer = "Pleas only send numbers not anythin else\nexample Link:\nhttp://exampledomain.net/api/httpTrigger7?Ax=0&Ay=0&Bx=5&By=0&Cx=0&Cy=5&Px=1&Dx=0&Dy=0&Py=1\n"
         let helpAnswerJSON = 'example JSON:\n{\n"Ax": 0,\n"Ay": 0,\n"Bx": 5,\n"By": 0,\n"Cx": 0,\n"Cy": 5,\n"Dx": 0,\n"Dy": 0,\n"Px": 1,\n"Py": 1\n}'
         // Try to parse the JSON body
 
