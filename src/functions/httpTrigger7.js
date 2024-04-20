@@ -13,9 +13,21 @@ app.http('dreiecken1', {
         const D = [parseFloat(request.query.get('Dx')), parseFloat(request.query.get('Dy'))];
         const point = [parseFloat(request.query.get('Px')), parseFloat(request.query.get('Py'))];
 
+        let helpAnswer = "Pleas only send numbers not anythin else\nexample Link:\nhttp://exampledomain.net/api/dreiecken1?Ax=0&Ay=0&Bx=5&By=0&Cx=0&Cy=5&Px=1&Dx=0&Dy=0&Py=1\n"
+        let helpAnswerJSON = 'example JSON:\n{\n"Ax": 0,\n"Ay": 0,\n"Bx": 5,\n"By": 0,\n"Cx": 0,\n"Cy": 5,\n"Dx": 0,\n"Dy": 0,\n"Px": 1,\n"Py": 1\n}'
+        // Try to parse the JSON body
+
          // If not all parameters are provided in the query string, try to extract from the request body
        if (!A.every(x => !isNaN(x)) || !B.every(x => !isNaN(x)) || !C.every(x => !isNaN(x)) || !D.every(x => !isNaN(x)) || !point.every(x => !isNaN(x))) {
-        const requestBody = await request.json();
+        let requestBody;
+       
+        try {
+            requestBody = await request.json(); // Use rawBody if available
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            return {body: helpAnswer + helpAnswerJSON ,status:"400"}  
+        }
+
         if (requestBody) {
             A[0] = parseFloat(requestBody.Ax);
             A[1] = parseFloat(requestBody.Ay);
@@ -29,6 +41,11 @@ app.http('dreiecken1', {
             point[1] = parseFloat(requestBody.Py);
         }
     }
+
+         // Check if the arrays contain anythin elese but numbers
+         if (!A.every(x => !isNaN(x)) || !B.every(x => !isNaN(x)) || !C.every(x => !isNaN(x)) || !D.every(x => !isNaN(x)) || !point.every(x => !isNaN(x))) {
+            return {body: helpAnswer + helpAnswerJSON ,status:"400"}     
+        }
         
         // Calculate if the point is inside the triangle
         const isInside = pointInSquare(point, A, B, C, D);
